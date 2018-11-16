@@ -25,7 +25,6 @@ int HEAP::getCap()
 HEAP* Initialize(int n)
 {
 	HEAP* h = new HEAP(n, 0);
-	//std::cout << h->capacity << std::endl;
 	
 	return h;
 }
@@ -51,40 +50,40 @@ void Print_Heap(HEAP* h)
 }
 //
 
-void Max_Heapify(HEAP* heap, int i)
+
+//WIP conversion of Max_Heapify to Min_Heapify;
+void Min_Heapify(HEAP* heap, int i)
 {
-	//std::cout << "\nNew round of Max_Heapify: \n" << std::endl;
+
 
 	int L = 2*i;
 	int R = 2*i + 1;
-	int largest = i;
+	int smallest = i;
 	
-	//std::cout << "value of i: " << i << "\nvalue of L: " << L << "\nvalue of R: " << R << std::endl;
-	//std::cout << "H[0]: " << heap->H[0].key << std::endl;
+
 	
-	if (L < heap->size && heap->H[L].key > heap->H[i].key)
+	if (L < heap->size && heap->H[L].key < heap->H[i].key)
 	{
-		//std::cout << "\nL: " << L << "\nlargest: " << largest << std::endl;
-		largest = L;
-		//std::cout << "\nL: " << L << "\nlargest: " << largest << std::endl;
+
+		smallest = L;
+
 	}
-	if (R < heap->size && heap->H[R].key > heap->H[largest].key)
+	if (R < heap->size && heap->H[R].key < heap->H[largest].key)
 	{
-		//std::cout << "\nR: " << R << "\nlargest: " << largest << std::endl;
-		largest = R;
-		//std::cout << "\nR: " << R << "\nlargest: " << largest << std::endl;
+
+		smallest = R;
+
 	}
-	if (largest != i)
+	if (smallest != i)
 	{
-		//std::cout << "H[" << i << "] " << heap->H[i].key << std::endl;
-		//std::cout << "H[" << largest << "] " << heap->H[largest].key << std::endl;
+
 		ELEMENT temp = heap->H[i];
-		//std::cout << "temp.key: " << temp.key << std::endl;
-		heap->H[i] = heap->H[largest];
-		heap->H[largest] = temp;
-		Max_Heapify(heap, largest);
+
+		heap->H[i] = heap->H[smallest];
+		heap->H[smallest] = temp;
+		Max_Heapify(heap, smallest);
 	}
-	//std::cout << "H[0]: " << heap->H[0].key << std::endl;
+
 	return;
 }
 
@@ -107,20 +106,20 @@ void Build_Heap(HEAP* heap, ELEMENT* Array, int n, int flag)
 	}
 	
 	std::cout << "Filling heap with elements from array" << std::endl;
-	//std::cout << "Heap capacity before Build_Heap: " << heap->capacity << std::endl;
+
 	for (int i = 0; i < n; i++)
 	{
-		//std::cout << "Array[" << i << "] key: " << Array[i].key << std::endl;
+
 		heap->H[i] = ELEMENT(Array[i].key);
 		heap->size++;
-		//std::cout << "Heap[" << i << "] key: " << heap->H[i].key << std::endl;
+
 	}
-	//std::cout << "Heap capacity after first step of Build_Heap: " << heap->capacity << std::endl;
+
 	if (flag == 2)
 	{
 		for (int i = n/2; i > -1; i--)
 		{
-			Max_Heapify(heap, i);
+			Min_Heapify(heap, i);
 			Print_Heap(heap);
 		}		
 	}
@@ -129,11 +128,11 @@ void Build_Heap(HEAP* heap, ELEMENT* Array, int n, int flag)
 	{
 		for (int i = n/2; i > -1; i--)
 		{
-			//std::cout << "\n\nOuter call to Max_Heapify\n\n" << std::endl;
-			Max_Heapify(heap, i);
+
+			Min_Heapify(heap, i);
 		}
 	}
-	//std::cout << "Heap capacity after second step of Build_Heap: " << heap->capacity << std::endl;
+
 	if (flag == 1)
 	{
 		Print_Heap(heap);
@@ -146,13 +145,13 @@ void Heap_Increase_Key(HEAP* heap, int i, int value, int flag)
 {
 	if (value < heap->H[i].key)
 	{
-		//std::cout << heap->H[i].key << std::endl;
+
 		std::cout << "error: new key is smaller than current key" << std::endl;
 		return;
 	}
 	else
 	{
-		//std::cout << "Heap_Increase_Key" << std::endl;
+
 		if (flag == 1) {Print_Heap(heap);}
 		heap->H[i].key = value;
 		
@@ -183,7 +182,6 @@ void Insert_Key(HEAP* heap, int value, int flag)
 		heap->capacity = std::pow(2,c);		
 	}	
 	
-	//std::cout << "hello I'm insert_key" << std::endl;
 	
 	std::cout << "Inserting key at end of heap" << std::endl;
 	if (flag == 1) {Print_Heap(heap);}
@@ -220,7 +218,7 @@ void Insert(HEAP* heap, int k, int flag)
 	Insert_Key(heap, k, flag);
 }
 
-ELEMENT Delete_Max(HEAP* heap, int flag)
+ELEMENT Delete_Min(HEAP* heap, int flag)
 {
 	if (heap->size < 1 || heap == nullptr)
 	{
@@ -234,13 +232,13 @@ ELEMENT Delete_Max(HEAP* heap, int flag)
 	}
 	
 	ELEMENT temp = ELEMENT(heap->H[0].key);
-	//std::cout << heap->H[0].key << std::endl;
+
 	heap->H[0] = heap->H[heap->size - 1];
-	//std::cout << heap->H[0].key << std::endl;
+
 	delete &(heap->H[heap->size - 1]);
 	heap->size--;
 	
-	Max_Heapify(heap, 0);
+	Min_Heapify(heap, 0);
 	
 	if (flag == 1)
 	{

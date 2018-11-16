@@ -7,7 +7,7 @@
 
 #include "heap.h"
 
-char nextCommand(int* i, int* v, int* f, HEAP* heap, FILE* file);
+char nextCommand(int* i, int* v, int* f, GRAPH* heap, FILE* file);
 
 
 #endif

@@ -51,7 +51,6 @@ char nextCommand(int *i, int *v, int *f, HEAP* heap, FILE* file)
 		if (c == 'I' || c == 'i')
 		{
 			scanf("%d", v); scanf("%d", f);
-			//Insert_Key(heap,*i, *v, *f);
 			break;
 		}
 		
