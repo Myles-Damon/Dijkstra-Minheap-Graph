@@ -10,7 +10,9 @@
 #include <iostream>
 #include <cmath>
 
-struct ELEMENT{
+#include "graph.h"
+
+/*struct ELEMENT{
 	int node;
 	int key;
 	int pi;
@@ -18,7 +20,7 @@ struct ELEMENT{
 	ELEMENT(int n);
 	ELEMENT(int n, int d, int p);
 
-};
+};*/ //Moved to heap.h???
 
 struct HEAP{
 	int capacity;
@@ -36,8 +38,9 @@ HEAP* Initialize(int n);
 
 void Print_Heap(HEAP* h);
 
-
+void Min_Heapify(GRAPH* g, int i, int n);
 void Min_Heapify(HEAP* heap, int i);
+
 
 
 void Build_Heap(HEAP* heap, ELEMENT* Array, int n, int flag);
@@ -51,8 +54,9 @@ void Insert_Key(HEAP* heap, int value, int flag);
 
 void Insert(HEAP* heap, int k, int flag);
 
-
+ELEMENT Delete_Min(GRAPH* g, int flag);
 ELEMENT Delete_Min(HEAP* heap, int flag);
+
 
 
 char nextCommand(int *i, int *v, int *f, HEAP* heap, FILE* file);

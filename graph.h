@@ -10,6 +10,18 @@
 #include <iostream>
 #include <cmath>
 
+//#include "heap.h"
+
+struct ELEMENT{
+	int node;
+	int key;
+	int pi;
+	
+	ELEMENT(int n);
+	ELEMENT(int n, int d, int p);
+
+};
+
 struct LIST
 {
 	// These represent edges
@@ -33,13 +45,15 @@ struct GRAPH{
 	int SNS; // sorted_node_size (size of sortedNodes)
 	int* nodePositions; // needed in order to keep track of where all those nodes are after I start heapifying shit
 	ELEMENT* heapOfNodes; //pointer of type ELEMENT; NOT a HEAP struct!
-	ELEMENT* sortedNodes; // "S" in the Dijkstra algorithm
+	//ELEMENT* sortedNodes; // "S" in the Dijkstra algorithm
 	LIST** adj_list; // depreciated
 	
 	GRAPH(int v, int e);
 };
 
+void Print_Graph(GRAPH* g);
 
+void Build_Graph(GRAPH* graph,/* int s, int m, */int flag);
 
 GRAPH* Initialize_Graph(int vertices, int edges);
 

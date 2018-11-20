@@ -4,15 +4,16 @@
 #include <iostream>
 #include <cmath>
 
+#include "graph.h"
 #include "heap.h"
 
 #pragma GCC diagnostic ignored "-Wpointer-arith"
 #pragma GCC diagnostic ignored "-Wconversion-null"
 
-//
+/*
 ELEMENT::ELEMENT(int n) : key(n) {}
 ELEMENT::ELEMENT(int n, int d, int p) : node(n), key(d), pi(p) {}
-//
+*/
 
 //
 HEAP::HEAP(int cap, int siz) : capacity(cap), size(siz), H ((ELEMENT*) malloc(sizeof(ELEMENT) * cap)) {}
@@ -63,12 +64,20 @@ void Print_Heap(HEAP* h)
 void Min_Heapify(/*HEAP* heap*/GRAPH* g, int i, int n)
 {
 
-	// n is heap size passed as an argument instead of accessed via the HEAP*
-	int L = 2*i;
-	int R = 2*i + 1;
-	int smallest = i;
-	
-
+	int L, R, smallest;	
+	// n is heap size passed as an argument
+	if (i == 0)
+	{
+		L = 1;
+		R = 2;
+		smallest = i;
+	}
+	else
+	{
+		L = 2*i;
+		R = 2*i + 1;
+		smallest = i;
+	}
 	
 	if (L < /*heap->size*/n && /*heap->H[L].key < heap->H[i].key*/g->heapOfNodes[L].key < g->heapOfNodes[i].key)
 	{
@@ -102,6 +111,43 @@ void Min_Heapify(/*HEAP* heap*/GRAPH* g, int i, int n)
 		g->heapOfNodes[smallest] = temp;
 		g->nodePositions[smallest] = /*&g->heapOfNodes[*/i/*]*/;
 		g->nodePositions[i] = /*&g->heapOfNodes[*/smallest/*]*/;
+		
+	}
+
+	return;
+}
+
+void Min_Heapify(HEAP* heap, int i)
+{
+
+	// n is heap size passed as an argument instead of accessed via the HEAP*
+	int L = 2*i;
+	int R = 2*i + 1;
+	int smallest = i;
+	
+
+	
+	if (L < heap->size && heap->H[L].key < heap->H[i].key)
+	{
+
+		smallest = L;
+
+	}
+	if (R < heap->size && heap->H[R].key < heap->H[smallest].key)
+	{
+
+		smallest = R;
+
+	}
+	if (smallest != i)
+	{
+		
+		ELEMENT temp = heap->H[i];
+
+		heap->H[i] = heap->H[smallest];
+		heap->H[smallest] = temp;
+		Min_Heapify(heap, smallest);
+
 		
 	}
 
@@ -280,7 +326,7 @@ ELEMENT Delete_Min(GRAPH* g, int flag)
 	// delete the node, it just puts it at the back and changes
 	// the node's position thing in GRAPH.
 	
-	if (g->V < 1 || g->heapOfNodes[0] == nullptr)
+	if (g->heapOfNodes == nullptr || g->V < 1)
 	{
 		std::cout << "error: graph empty (sorted) or uninitialized" << std::endl;
 		return NULL;
@@ -288,11 +334,11 @@ ELEMENT Delete_Min(GRAPH* g, int flag)
 	
 	if (flag == 1)
 	{
-		Print_Graph(g->heapOfNodes);
+		Print_Graph(g);
 	}
 	
-	int nodeZeroNumber = heapOfNodes[0].node; // Decide which node it is
-	int nodeLastNumber = heapOfNodes[g->numberOfNodes - 1].node // Figure out which node the last node is
+	int nodeZeroNumber = g->heapOfNodes[0].node; // Decide which node it is
+	int nodeLastNumber = g->heapOfNodes[g->numberOfNodes - 1].node; // Figure out which node the last node is
 	//ELEMENT temp = ELEMENT(nodeZeroNumber, g->heapOfNodes[0].key, g->heapOfNodes[0].pi); // Initialize a new node with the same info as the node which I'll be deleting
 
 	
@@ -312,11 +358,11 @@ ELEMENT Delete_Min(GRAPH* g, int flag)
 	//delete &(g->heapOfNodes[g->numberOfNodes - 1]); // delete unneeded node;
 	g->numberOfNodes--;
 	
-	Min_Heapify(g, 0);
+	Min_Heapify(g, 0, g->numberOfNodes);
 	
 	if (flag == 1)
 	{
-		Print_Heap(g);
+		Print_Graph(g);
 	}
 	return temp;
 	

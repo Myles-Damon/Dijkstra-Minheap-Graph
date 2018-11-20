@@ -13,10 +13,13 @@
 
 #define INF 2147283647
 
+ELEMENT::ELEMENT(int n) : key(n) {}
+ELEMENT::ELEMENT(int n, int d, int p) : node(n), key(d), pi(p) {}
+
 LIST::LIST(int weightIn, int neighborIn) : weight(weightIn), neighbor(neighborIn), next(nullptr) {}
 LIST::LIST(int weightIn, int neighborIn, LIST* nextIn) : weight(weightIn), neighbor(neighborIn), next(nextIn) {} // Might need to have "next" be initialized to null and assigned afterwards
 
-GRAPH::GRAPH(int v, int e) : V(v), E(e), numberOfNodes(v), SNS(0), nodePositions ((int*) malloc(sizeof(int) * V)), sortedNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V)), heapOfNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V)), adj_list ((LIST**) malloc(sizeof(LIST*) * V)) {}
+GRAPH::GRAPH(int v, int e) : V(v), E(e), numberOfNodes(v), SNS(0), nodePositions ((int*) malloc(sizeof(int) * V)), heapOfNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V)), adj_list ((LIST**) malloc(sizeof(LIST*) * V))/*, sortedNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V))*/  {}
 
 ADJ_LIST::ADJ_LIST(LIST* headPtr) : head(headPtr) {}
 
@@ -34,15 +37,22 @@ void Print_Graph(GRAPH* g)
 		///////////////////////////////////////////////////////////
 		// NOT DONE! Need to format output to match requirements //
 		///////////////////////////////////////////////////////////
-		/*for (int i = 0; i < g->V; i++)
+		for (int i = 0; i < g->V; i++)
 		{
-			std::cout << "u : " << i << ": " << g->H[i].key << std::endl;
-		}*/
+			std::cout << i + 1 << ": ";
+			LIST* traversal = g->adj_list[i];
+			while(traversal != nullptr)
+			{
+				std::cout << "(" << traversal->neighbor << "," << traversal->weight << "); ";
+				traversal = traversal->next;
+			}
+			std::cout << std::endl;
+		}
 	}
 	return;
 }
 
-void Build_Graph(GRAPH* graph, ELEMENT* Array, int s, int m, int flag)
+void Build_Graph(GRAPH* g, /*ELEMENT* Array, int s, int m, */int flag)
 {
 	/* Removed since I won't be re-sizing the graph's array
 	// N IS THE SIZE OF ARRAY Array[]
@@ -78,8 +88,8 @@ void Build_Graph(GRAPH* graph, ELEMENT* Array, int s, int m, int flag)
 	{
 		for (int i = g->V/2; i > -1; i--)
 		{
-			Min_Heapify(heap, i);
-			Print_Heap(heap);
+			Min_Heapify(g, i, g->numberOfNodes);
+			Print_Graph(g);
 		}		
 	}
 	
@@ -88,13 +98,13 @@ void Build_Graph(GRAPH* graph, ELEMENT* Array, int s, int m, int flag)
 		for (int i = g->V/2; i > -1; i--)
 		{
 
-			Min_Heapify(heap, i);
+			Min_Heapify(g, i, g->numberOfNodes);
 		}
 	}
 
 	if (flag == 1)
 	{
-		Print_Heap(heap);
+		Print_Graph(g);
 	}
 	
 	return;
@@ -105,9 +115,9 @@ void Initialize_Single_Source(GRAPH* g, int source)
 	// initialize all nodes (ELEMENTs) to un-relaxed state
 	for (int i = 0; i < g->V; i++)
 	{
-		g->heapOfNodes[i] = new ELEMENT(i + 1, INF, NULL);
+		g->heapOfNodes[i] =ELEMENT(i + 1, INF, NULL);
 	}
-	heapOfNodes[source]->key = 0; // distance from source to source = 0;
+	g->heapOfNodes[source].key = 0; // distance from source to source = 0;
 }
 
 GRAPH* Initialize_Graph(int vertices, int edges)
@@ -135,18 +145,18 @@ int findShortestEdge(GRAPH* g, int u, int v)
 		}
 		edgeTraversal = edgeTraversal->next;
 	}
-	return edgeTraversal;
+	return shortestDistance;
 }
 
 void Relax(GRAPH* g, int u, int v, int w)
 {
 	int fSEint = findShortestEdge(g,u,v);
-	if (g->heapOfNodes[v]->key > (g->heapOfNodes[u]->key + fSEint))
+	if (g->heapOfNodes[v].key > (g->heapOfNodes[u].key + fSEint))
 	{
 		// Update the distance variable ("key") for the node
 		// && Update it's parent node variable
-		g->heapOfNodes[v]->key = g->heapOfNodes[u]->key + fSEint;
-		g->heapOfNodes[v]->pi = u;
+		g->heapOfNodes[v].key = g->heapOfNodes[u].key + fSEint;
+		g->heapOfNodes[v].pi = u;
 	}
 }
 

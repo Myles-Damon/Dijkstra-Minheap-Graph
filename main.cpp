@@ -64,7 +64,7 @@ int main()
 			}*/
 			else
 			{
-				char buffer[10];
+				//char buffer[10];
 				std::cout << "COMMAND: " << c <</* " " << f << */std::endl;
 				//std::cout << "Heap capacity: " << heap->capacity << std::endl;
 				/* Stuff for heap, not graph
@@ -75,13 +75,17 @@ int main()
 				*/ // END Stuff for heap, not graph
 				// fill up array
 				int q = 0;
+				char flag = w;
 				// Read first line and get number of vertices and edges
 				fscanf(file, "%i", &v);
+				std::cout << "vertices: " << v << std::endl;
 				fscanf(file, "%i", &u);
+				std::cout << "edges: " << u << std::endl;
 				graph = Initialize_Graph(v, u);
+				std::cout << "graph initialized" << std::endl;
 				
 				// Initialize adjacency list
-				while (fscanf(file, "%i %i %i", &u, &v, &w))
+				while (fscanf(file, "%i %i %i", &u, &v, &w) && q < graph->E)
 				{
 					/*if(graph->adj_list[u] == nullptr)
 					{
@@ -90,11 +94,13 @@ int main()
 					//LIST* nullListPtr = nullptr;
 					
 					// initializes an edge and sets its "next" pointer to the current head
-					LIST* newEdge = new LIST(w, v, graph->adj_list[u]);
+					LIST* newEdge = new LIST(w, v, graph->adj_list[u - 1]);
 					// sets the current head to the newly initialized edge, thereby inserting it 
 					// into the linked list at the top while preserving the linked list's order
-					graph->adj_list[u] = newEdge;
+					graph->adj_list[u - 1] = newEdge;
+					q++;
 				}
+				//std::cout << graph->adj_list[0]->neighbor << " " << graph->adj_list[0]->weight << std::endl;
 				/*
 				while (fgets(buffer, 10, file) && q < (length))
 				{
@@ -105,7 +111,7 @@ int main()
 				
 				Build_Heap(heap, A, q, w);
 				*/
-				Build_Graph(g, 
+				Build_Graph(graph, flag);
 				/*
 				if (length < heap->size)
 				{
@@ -175,6 +181,16 @@ int main()
 	{
 		free(heap->H);
 		free(heap);
+	}
+	if(graph)
+	{
+		//need to recursively free/delete every LIST element I've created in adj_list
+		//deleteList(LIST* lpt){if(LIST*==nullptr){return;}else{deleteList(lpt->next); free(lpt);}}
+		//free adj_list itself
+		//free every node element in heapOfNodes
+		//free the nodePositions memory
+		//???
+		//Profit
 	}
 	
 	std::cout << "thanks for coming!" << std::endl;

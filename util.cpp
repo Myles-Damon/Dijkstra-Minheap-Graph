@@ -6,7 +6,9 @@
 #include "util.h"
 #include "heap.h"
 
-char nextCommand(int *i, int *v, int *f, HEAP* heap, FILE* file)
+// u == i; v == v; w == f
+
+char nextCommand(int *u, int *v, int *w, HEAP* heap, FILE* file)
 {
 	char c;
 	while(1)
@@ -37,7 +39,7 @@ char nextCommand(int *i, int *v, int *f, HEAP* heap, FILE* file)
 		// Build the heap 
 		if (c == 'R' || c == 'r')
 		{
-			scanf("%d", f);
+			scanf("%d", w);
 			break;
 		}
 		
@@ -50,21 +52,21 @@ char nextCommand(int *i, int *v, int *f, HEAP* heap, FILE* file)
 
 		if (c == 'I' || c == 'i')
 		{
-			scanf("%d", v); scanf("%d", f);
+			scanf("%d", v); scanf("%d", w);
 			break;
 		}
 		
 		// Increase key
 		if (c == 'K' || c == 'k')
 		{
-			scanf("%d", i); scanf("%d", v); scanf("%d", f);
+			scanf("%d", u); scanf("%d", v); scanf("%d", w);
 			break;
 		}
 
 		// Delete max and print it's key value
 		if (c == 'D' || c == 'd')
 		{
-			scanf("%d", f);
+			scanf("%d", w);
 			break;
 		}
 
