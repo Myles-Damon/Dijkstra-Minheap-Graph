@@ -11,6 +11,7 @@
 
 //
 ELEMENT::ELEMENT(int n) : key(n) {}
+ELEMENT::ELEMENT(int n, int d, int p) : node(n), key(d), pi(p) {}
 //
 
 //
@@ -28,6 +29,13 @@ HEAP* Initialize(int n)
 	
 	return h;
 }
+/*
+GRAPH* Initialize(int vertices, int edges)
+{
+	GRAPH* g = new GRAPH(vertices, edges);
+	
+	return g;
+}*/
 //
 
 //
@@ -52,23 +60,23 @@ void Print_Heap(HEAP* h)
 
 
 //WIP conversion of Max_Heapify to Min_Heapify;
-void Min_Heapify(HEAP* heap, int i)
+void Min_Heapify(/*HEAP* heap*/GRAPH* g, int i, int n)
 {
 
-
+	// n is heap size passed as an argument instead of accessed via the HEAP*
 	int L = 2*i;
 	int R = 2*i + 1;
 	int smallest = i;
 	
 
 	
-	if (L < heap->size && heap->H[L].key < heap->H[i].key)
+	if (L < /*heap->size*/n && /*heap->H[L].key < heap->H[i].key*/g->heapOfNodes[L].key < g->heapOfNodes[i].key)
 	{
 
 		smallest = L;
 
 	}
-	if (R < heap->size && heap->H[R].key < heap->H[largest].key)
+	if (R < /*heap->size*/n && /*heap->H[R].key < heap->H[smallest].key*/g->heapOfNodes[R].key < g->heapOfNodes[smallest].key)
 	{
 
 		smallest = R;
@@ -76,12 +84,25 @@ void Min_Heapify(HEAP* heap, int i)
 	}
 	if (smallest != i)
 	{
-
+		/*
 		ELEMENT temp = heap->H[i];
 
 		heap->H[i] = heap->H[smallest];
 		heap->H[smallest] = temp;
-		Max_Heapify(heap, smallest);
+		Min_Heapify(heap, smallest);
+		*/
+		
+		ELEMENT temp = g->heapOfNodes[i];
+		
+		// OK, I WROTE THIS POINTER SWAP WHEN I WAS VERY TIRED AND I'M NOT EVEN 50% SURE I DID IT CORRECTLY
+		// NEED TO RECHECK THIS IN THE MORNING
+		
+		// RECHECKED, PRETTY SURE I FIXED IT
+		g->heapOfNodes[i] = g->heapOfNodes[smallest];
+		g->heapOfNodes[smallest] = temp;
+		g->nodePositions[smallest] = /*&g->heapOfNodes[*/i/*]*/;
+		g->nodePositions[i] = /*&g->heapOfNodes[*/smallest/*]*/;
+		
 	}
 
 	return;
@@ -245,6 +266,68 @@ ELEMENT Delete_Min(HEAP* heap, int flag)
 		Print_Heap(heap);
 	}
 	return temp;
+}
+
+// Graph-ified version of Delete_Min
+ELEMENT Delete_Min(GRAPH* g, int flag)
+{
+	// So... I'm thinking I should just set the "node to be removed"
+	// as the last node in the heap and then decrease the heap_size
+	// variable of GRAPH so that I don't have to create a second 
+	// array of ELEMENTS and can do more w/ less code.
+	
+	// With that said, I'm gonna do that. So this doesn't actually 
+	// delete the node, it just puts it at the back and changes
+	// the node's position thing in GRAPH.
+	
+	if (g->V < 1 || g->heapOfNodes[0] == nullptr)
+	{
+		std::cout << "error: graph empty (sorted) or uninitialized" << std::endl;
+		return NULL;
+	}
+	
+	if (flag == 1)
+	{
+		Print_Graph(g->heapOfNodes);
+	}
+	
+	int nodeZeroNumber = heapOfNodes[0].node; // Decide which node it is
+	int nodeLastNumber = heapOfNodes[g->numberOfNodes - 1].node // Figure out which node the last node is
+	//ELEMENT temp = ELEMENT(nodeZeroNumber, g->heapOfNodes[0].key, g->heapOfNodes[0].pi); // Initialize a new node with the same info as the node which I'll be deleting
+
+	
+	ELEMENT temp = g->heapOfNodes[nodeZeroNumber];
+		
+	// OK, I WROTE THIS POINTER SWAP WHEN I WAS VERY TIRED AND I'M NOT EVEN 50% SURE I DID IT CORRECTLY
+	// NEED TO RECHECK THIS IN THE MORNING
+	g->heapOfNodes[0] = g->heapOfNodes[g->numberOfNodes - 1];
+	g->heapOfNodes[g->numberOfNodes - 1] = temp;
+	g->nodePositions[nodeZeroNumber] = g->numberOfNodes - 1;
+	g->nodePositions[nodeLastNumber] = 0;
+		
+	//g->heapOfNodes[0] = g->heapOfNodes[g->numberOfNodes - 1]; 
+	// Set top node to bottom node
+	// in order to shake-up heap and allow us to min-heapify
+
+	//delete &(g->heapOfNodes[g->numberOfNodes - 1]); // delete unneeded node;
+	g->numberOfNodes--;
+	
+	Min_Heapify(g, 0);
+	
+	if (flag == 1)
+	{
+		Print_Heap(g);
+	}
+	return temp;
+	
+	// NEED TO ADD TO sortedNodeList in the correct position 
+	// IE JUST PUT IT IN THE ARRAY IN THE POSITION WHICH IT'S 
+	// NODE ATTRIBUTE SUGGESTS
+	
+	// OR JUST DO WHAT I ENDED UP DOING, WHICH WAS TO JUST PUT IT AT THE END OF THE LIST 
+	// AND THEN CHANGE THE VARIABLE WHICH REPRESENTS THE SIZE OF THE HEAP SO THAT I DON'T 
+	// HAVE TO USE MORE THAN ONE ARRAY/HEAP
+	
 }
 
 

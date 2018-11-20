@@ -13,9 +13,10 @@
 struct ELEMENT{
 	int node;
 	int key;
-	int p;
+	int pi;
 	
 	ELEMENT(int n);
+	ELEMENT(int n, int d, int p);
 
 };
 
@@ -36,7 +37,7 @@ HEAP* Initialize(int n);
 void Print_Heap(HEAP* h);
 
 
-void Max_Heapify(HEAP* heap, int i);
+void Min_Heapify(HEAP* heap, int i);
 
 
 void Build_Heap(HEAP* heap, ELEMENT* Array, int n, int flag);
@@ -51,7 +52,7 @@ void Insert_Key(HEAP* heap, int value, int flag);
 void Insert(HEAP* heap, int k, int flag);
 
 
-ELEMENT Delete_Max(HEAP* heap, int flag);
+ELEMENT Delete_Min(HEAP* heap, int flag);
 
 
 char nextCommand(int *i, int *v, int *f, HEAP* heap, FILE* file);

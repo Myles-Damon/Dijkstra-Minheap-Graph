@@ -6,8 +6,10 @@
 #define _UTIL_H_INCLUDED
 
 #include "heap.h"
+//#include "graph.h"
 
-char nextCommand(int* i, int* v, int* f, GRAPH* heap, FILE* file);
+char nextCommand(int* i, int* v, int* f, HEAP* heap, FILE* file);
 
+//GRAPH* Initialize_Everything(int vertices, int degrees);
 
 #endif
