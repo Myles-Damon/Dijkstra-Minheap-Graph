@@ -51,6 +51,11 @@ void Print_Graph(GRAPH* g)
 			}
 			std::cout << std::endl;
 		}
+		
+		for (int i = 0; i < g->V; i++)
+		{
+			std::cout << "node: " << g->heapOfNodes[i].node << " \nweight: " << g->heapOfNodes[i].key << std::endl;
+		}
 	}
 	return;
 }
@@ -118,7 +123,8 @@ void Dijkstra(GRAPH* g)
 	// "remove" all of the nodes from the graph and adjust their neighbor's weights
 	for (int i = 0; i < g->V; i++)
 	{
-		
+		findShortestEdge(g, g->heapOfNodes[0].node);
+		Min_Heapify(g, 0, g->numberOfNodes);
 	}
 }
 
@@ -142,36 +148,41 @@ GRAPH* Initialize_Graph(int vertices, int edges)
 	for (int i = 0; i < vertices; i++)
 	{
 		g->adj_list[i] = nullptr;
+		g->nodePositions[i] = i;
 	}
 	
 	return g;
 }
 
-int findShortestEdge(GRAPH* g, int u, int v)
+/*int*/void findShortestEdge(GRAPH* g, int u/*, int v*/)
 {
-	int shortestDistance = INF;
-	LIST* edgeTraversal = g->adj_list[g->nodePositions[u]];
+	std::cout << "finding shortest edge" << g->nodePositions[0] << std::endl;
+	//int shortestDistance = INF;
+	LIST* edgeTraversal = g->adj_list[u - 1];
 	while(edgeTraversal != nullptr)
 	{
-		if (edgeTraversal->neighbor == v && edgeTraversal->weight < shortestDistance)
+		if (edgeTraversal->weight < g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor]].key + g->heapOfNodes[g->nodePositions[u - 1]].key/*  == v && edgeTraversal->weight < shortestDistance*/)
 		{
-			shortestDistance = edgeTraversal->weight;	
+			//shortestDistance = edgeTraversal->weight;
+			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor]].key = g->heapOfNodes[g->nodePositions[u - 1]].key + edgeTraversal->weight;
 		}
 		edgeTraversal = edgeTraversal->next;
 	}
-	return shortestDistance;
+	std::cout << "did" << std::endl;
+	return;// shortestDistance;
 }
 
 void Relax(GRAPH* g, int u, int v, int w)
 {
-	int fSEint = findShortestEdge(g,u,v);
+	/*
+	int fSEint = findShortestEdge(g,u);
 	if (g->heapOfNodes[v].key > (g->heapOfNodes[u].key + fSEint))
 	{
 		// Update the distance variable ("key") for the node
 		// && Update it's parent node variable
 		g->heapOfNodes[v].key = g->heapOfNodes[u].key + fSEint;
 		g->heapOfNodes[v].pi = u;
-	}
+	}*/
 }
 
 

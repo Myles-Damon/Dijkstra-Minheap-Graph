@@ -66,7 +66,27 @@ void Min_Heapify(/*HEAP* heap*/GRAPH* g, int i, int n)
 
 	int L, R, smallest;	
 	// n is heap size passed as an argument
-	if (i == 0)
+	/*if(!(i < n)
+	{
+		return;
+	}
+	else if (n < 3)
+	{
+		if (n == 2)
+		{
+			L = 1;
+			smallest = 0;
+			if (g->heapOfNodes[L].key < g->heapOfNodes[i].key)
+			{
+				
+			}
+		}
+		else
+		{
+			return;
+		}
+	}
+	else */if (i == 0)
 	{
 		L = 1;
 		R = 2;
@@ -334,6 +354,7 @@ ELEMENT Delete_Min(HEAP* heap, int flag)
 	
 	if (flag == 1)
 	{
+		std::cout << "Printing graph before deletion of min node" << std::endl;
 		Print_Graph(g);
 	}
 	
@@ -341,22 +362,40 @@ ELEMENT Delete_Min(HEAP* heap, int flag)
 	int nodeLastNumber = g->heapOfNodes[g->numberOfNodes - 1].node; // Figure out which node the last node is
 	//ELEMENT temp = ELEMENT(nodeZeroNumber, g->heapOfNodes[0].key, g->heapOfNodes[0].pi); // Initialize a new node with the same info as the node which I'll be deleting
 
+	std::cout << "Assigned node numbers" << std::endl;
 	
+	ELEMENT* tempPtr = (ELEMENT*) malloc(sizeof(ELEMENT));
+	
+	//std::cout << "created thign" << nodeZeroNumber << std::endl;
+	tempPtr->key = g->heapOfNodes[nodeZeroNumber].key;
+	tempPtr->node = g->heapOfNodes[nodeZeroNumber].node;
+	tempPtr->pi = g->heapOfNodes[nodeZeroNumber].pi;
 	ELEMENT temp = g->heapOfNodes[nodeZeroNumber];
-		
+	
+	std::cout << "Created temporary node" << std::endl;
+	
 	// OK, I WROTE THIS POINTER SWAP WHEN I WAS VERY TIRED AND I'M NOT EVEN 50% SURE I DID IT CORRECTLY
 	// NEED TO RECHECK THIS IN THE MORNING
 	g->heapOfNodes[0] = g->heapOfNodes[g->numberOfNodes - 1];
 	g->heapOfNodes[g->numberOfNodes - 1] = temp;
+	/*g->heapOfNodes[g->numberOfNodes - 1].key = tempPtr->key;
+	g->heapOfNodes[g->numberOfNodes - 1].node = tempPtr->node;
+	g->heapOfNodes[g->numberOfNodes - 1].pi = tempPtr->pi;*/
 	g->nodePositions[nodeZeroNumber] = g->numberOfNodes - 1;
 	g->nodePositions[nodeLastNumber] = 0;
-		
+	
+	free(tempPtr);
+	
+	std::cout << "Finished node swap/deletion" << std::endl;
+	
 	//g->heapOfNodes[0] = g->heapOfNodes[g->numberOfNodes - 1]; 
 	// Set top node to bottom node
 	// in order to shake-up heap and allow us to min-heapify
 
 	//delete &(g->heapOfNodes[g->numberOfNodes - 1]); // delete unneeded node;
 	g->numberOfNodes--;
+	
+	std::cout << "Beginning Min_Heapify" << std::endl;
 	
 	Min_Heapify(g, 0, g->numberOfNodes);
 	

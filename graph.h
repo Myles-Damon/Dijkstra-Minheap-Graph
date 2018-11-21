@@ -57,6 +57,10 @@ void Print_Graph(GRAPH* g);
 
 void Build_Graph(GRAPH* graph,/* int s, int m, */int flag);
 
+void findShortestEdge(GRAPH* g, int u);
+
+void Initialize_Single_Source(GRAPH* g, int source);
+
 GRAPH* Initialize_Graph(int vertices, int edges);
 
 #endif

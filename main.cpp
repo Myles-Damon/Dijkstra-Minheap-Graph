@@ -124,7 +124,12 @@ int main()
 				
 				Build_Heap(heap, A, q, w);
 				*/
+				
+				
+				Initialize_Single_Source(graph, 0); // for testing purposes. Should be moved later
 				Build_Graph(graph, flag);
+				
+				
 				/*
 				if (length < heap->size)
 				{
@@ -135,14 +140,14 @@ int main()
 		}
 		else if (c == 'W' || c == 'w')
 		{
-			if(heap == nullptr)
+			if(graph == nullptr)
 			{
-				std::cout << "Please initialize the heap first" << std::endl;
+				std::cout << "Please initialize the graph first" << std::endl;
 			}
 			else
 			{
 				std::cout << "COMMAND: " << c << std::endl;
-				Print_Heap(heap);
+				Print_Graph(graph);
 			}
 		}
 		else if (c == 'I' || c == 'i')
@@ -174,6 +179,14 @@ int main()
 			{
 				std::cout << "Finding the shortest path" << std::endl;
 				// find the shortest path;
+				/*for (int i = 0; i < graph->V; i++)
+				{
+					Delete_Min(graph, w);
+				}*/
+				
+				// Need to call Dijkstra, not do whatever the fuck I was doing above...
+				Dijkstra(graph);
+				std::cout << "Graph sorting complete" << std::endl;
 			}
 		}
 		else if (c == 'K' || c == 'k')
