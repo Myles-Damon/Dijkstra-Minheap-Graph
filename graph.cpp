@@ -13,6 +13,9 @@
 
 #define INF 2147283647
 
+#pragma GCC diagnostic ignored "-Wpointer-arith"
+#pragma GCC diagnostic ignored "-Wconversion-null"
+
 ELEMENT::ELEMENT(int n) : key(n) {}
 ELEMENT::ELEMENT(int n, int d, int p) : node(n), key(d), pi(p) {}
 
@@ -110,6 +113,15 @@ void Build_Graph(GRAPH* g, /*ELEMENT* Array, int s, int m, */int flag)
 	return;
 }
 
+void Dijkstra(GRAPH* g)
+{
+	// "remove" all of the nodes from the graph and adjust their neighbor's weights
+	for (int i = 0; i < g->V; i++)
+	{
+		
+	}
+}
+
 void Initialize_Single_Source(GRAPH* g, int source)
 {
 	// initialize all nodes (ELEMENTs) to un-relaxed state
@@ -136,7 +148,7 @@ GRAPH* Initialize_Graph(int vertices, int edges)
 int findShortestEdge(GRAPH* g, int u, int v)
 {
 	int shortestDistance = INF;
-	LIST* edgeTraversal = g->adj_list[u];
+	LIST* edgeTraversal = g->adj_list[g->nodePositions[u]];
 	while(edgeTraversal != nullptr)
 	{
 		if (edgeTraversal->neighbor == v && edgeTraversal->weight < shortestDistance)

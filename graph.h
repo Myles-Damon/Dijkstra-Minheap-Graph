@@ -51,6 +51,8 @@ struct GRAPH{
 	GRAPH(int v, int e);
 };
 
+void Dijkstra(GRAPH*);
+
 void Print_Graph(GRAPH* g);
 
 void Build_Graph(GRAPH* graph,/* int s, int m, */int flag);

@@ -315,7 +315,7 @@ ELEMENT Delete_Min(HEAP* heap, int flag)
 }
 
 // Graph-ified version of Delete_Min
-ELEMENT Delete_Min(GRAPH* g, int flag)
+/*ELEMENT*/void Delete_Min(GRAPH* g, int flag)
 {
 	// So... I'm thinking I should just set the "node to be removed"
 	// as the last node in the heap and then decrease the heap_size
@@ -329,7 +329,7 @@ ELEMENT Delete_Min(GRAPH* g, int flag)
 	if (g->heapOfNodes == nullptr || g->V < 1)
 	{
 		std::cout << "error: graph empty (sorted) or uninitialized" << std::endl;
-		return NULL;
+		return/* NULL*/;
 	}
 	
 	if (flag == 1)
@@ -364,7 +364,7 @@ ELEMENT Delete_Min(GRAPH* g, int flag)
 	{
 		Print_Graph(g);
 	}
-	return temp;
+	return/* temp*/;
 	
 	// NEED TO ADD TO sortedNodeList in the correct position 
 	// IE JUST PUT IT IN THE ARRAY IN THE POSITION WHICH IT'S 

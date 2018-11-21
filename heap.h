@@ -53,7 +53,7 @@ void Insert_Key(HEAP* heap, int value, int flag);
 
 void Insert(HEAP* heap, int k, int flag);
 
-ELEMENT Delete_Min(GRAPH* g, int flag);
+/*ELEMENT*/void Delete_Min(GRAPH* g, int flag);
 ELEMENT Delete_Min(HEAP* heap, int flag);
 
 
