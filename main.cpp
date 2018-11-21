@@ -13,6 +13,19 @@
 #pragma GCC diagnostic ignored "-Wpointer-arith"
 #pragma GCC diagnostic ignored "-Wconversion-null"
 
+void deleteList(LIST* lpt)
+	{
+		if(lpt == nullptr)
+		{
+			return;
+		}
+		else
+		{
+			deleteList(lpt->next);
+			free(lpt);
+		}
+	}
+
 int main()
 {
 
@@ -144,13 +157,32 @@ int main()
 				Insert (heap, v, w);
 			}
 		}
+		else if (c == 'P' || c == 'p')
+		{
+			
+			// Find the shortest path from s to t  (u to v);
+			
+			if(graph == nullptr)
+			{
+				std::cout << "Please initialize the graph first" << std::endl;
+			}
+			else if(!(u < graph->V + 1) || !(v < graph->V + 1)) // u = s; v = t;
+			{
+				std::cout << "Please enter valid nodes" << std::endl;
+			}
+			else
+			{
+				std::cout << "Finding the shortest path" << std::endl;
+				// find the shortest path;
+			}
+		}
 		else if (c == 'K' || c == 'k')
 		{
 			if(heap == nullptr)
 			{
 				std::cout << "Please initialize the heap first" << std::endl;
 			}
-			else if(u < 0 || u >= heap->size)
+			else if (u < 0 || u >= heap->size)
 			{
 				std::cout << "Please give a valid index" << std::endl;
 			}
@@ -182,8 +214,30 @@ int main()
 		free(heap->H);
 		free(heap);
 	}
+	
+	
 	if(graph)
 	{
+		//Delete all LIST elements
+		LIST* lpt;
+		for(int i = 0; i < graph->V; i++)
+		{
+			lpt = graph->adj_list[i];
+			deleteList(lpt);
+		}
+		
+		free(graph->adj_list);
+		
+		/*for(int i = 0; i < graph->V; i++)
+		{
+			free(graph->heapOfNodes[i]);
+			free(graph->nodePositions[i]);
+		}*/
+		
+		free(graph->heapOfNodes);
+		free(graph->nodePositions);
+		
+		free(graph);
 		//need to recursively free/delete every LIST element I've created in adj_list
 		//deleteList(LIST* lpt){if(LIST*==nullptr){return;}else{deleteList(lpt->next); free(lpt);}}
 		//free adj_list itself

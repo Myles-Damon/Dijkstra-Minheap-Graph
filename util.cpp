@@ -75,6 +75,12 @@ char nextCommand(int *u, int *v, int *w, HEAP* heap, FILE* file)
 			std::cout << "this works" << std::endl;
 			break;
 		}
+		
+		if (c == 'P' || c == 'p')
+		{
+			scanf("%d", u); scanf("%d", v); scanf("%d", w);
+			break;
+		}
 
 		// Deal with invalid commands
 		else

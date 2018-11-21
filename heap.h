@@ -42,7 +42,6 @@ void Min_Heapify(GRAPH* g, int i, int n);
 void Min_Heapify(HEAP* heap, int i);
 
 
-
 void Build_Heap(HEAP* heap, ELEMENT* Array, int n, int flag);
 
 
@@ -56,7 +55,6 @@ void Insert(HEAP* heap, int k, int flag);
 
 ELEMENT Delete_Min(GRAPH* g, int flag);
 ELEMENT Delete_Min(HEAP* heap, int flag);
-
 
 
 char nextCommand(int *i, int *v, int *f, HEAP* heap, FILE* file);
