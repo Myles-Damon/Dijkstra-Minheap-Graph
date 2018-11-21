@@ -137,6 +137,8 @@ GRAPH* Initialize_Graph(int vertices, int edges)
 	GRAPH* g = new GRAPH(vertices, edges);
 	//LIST* nullListPtr = nullptr
 	/* need to separately initialize the edges I think*/
+	// NOPE to the above comment; Do need to add the edges 
+	// from the file separately though
 	for (int i = 0; i < vertices; i++)
 	{
 		g->adj_list[i] = nullptr;
