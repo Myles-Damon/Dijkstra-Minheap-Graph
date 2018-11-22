@@ -59,7 +59,6 @@ void Print_Heap(HEAP* h)
 }
 //
 
-
 //WIP conversion of Max_Heapify to Min_Heapify;
 void Min_Heapify(GRAPH* g, int i, int n)
 {
@@ -81,8 +80,12 @@ void Min_Heapify(GRAPH* g, int i, int n)
 				ELEMENT temp = g->heapOfNodes[i];
 				g->heapOfNodes[i] = g->heapOfNodes[smallest];
 				g->heapOfNodes[smallest] = temp;
-				g->nodePositions[g->heapOfNodes[smallest].node - 1] = i;
-				g->nodePositions[g->heapOfNodes[i].node - 1] = smallest;
+				//g->nodePositions[g->heapOfNodes[smallest].node - 1] = i;
+				//g->nodePositions[g->heapOfNodes[i].node - 1] = smallest;
+				for(int i = 0; i < g->V; i++)
+				{
+					g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+				}
 				return;
 			}
 		}
@@ -128,8 +131,13 @@ void Min_Heapify(GRAPH* g, int i, int n)
 		// RECHECKED, PRETTY SURE I FIXED IT
 		g->heapOfNodes[i] = g->heapOfNodes[smallest];
 		g->heapOfNodes[smallest] = temp;
-		g->nodePositions[g->heapOfNodes[smallest].node - 1] = i;
-		g->nodePositions[g->heapOfNodes[i].node - 1] = smallest;
+		//g->nodePositions[g->heapOfNodes[smallest].node - 1] = i;
+		//g->nodePositions[g->heapOfNodes[i].node - 1] = smallest;
+		
+		for(int i = 0; i < g->V; i++)
+		{
+			g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+		}
 		
 		Min_Heapify(g, smallest, g->numberOfNodes);
 		
@@ -359,12 +367,10 @@ void Delete_Min(GRAPH* g, int flag)
 		Print_Graph(g);
 	}
 	
-	int nodeZeroNumber = g->heapOfNodes[0].node; // Decide which node it is
-	int nodeLastNumber = g->heapOfNodes[g->numberOfNodes - 1].node; // Figure out which node the last node is
+	//int nodeZeroNumber = g->heapOfNodes[0].node; // Decide which node it is
+	//int nodeLastNumber = g->heapOfNodes[g->numberOfNodes - 1].node; // Figure out which node the last node is
 	
 	std::cout << "Assigned node numbers" << std::endl;
-	
-
 	
 	ELEMENT temp = g->heapOfNodes[0];
 	
@@ -374,17 +380,18 @@ void Delete_Min(GRAPH* g, int flag)
 	// NEED TO RECHECK THIS IN THE MORNING
 	g->heapOfNodes[0] = g->heapOfNodes[g->numberOfNodes - 1];
 	g->heapOfNodes[g->numberOfNodes - 1] = temp;
-	g->nodePositions[nodeZeroNumber - 1] = g->numberOfNodes - 1;
-	g->nodePositions[nodeLastNumber - 1] = 0;
-	
+	//g->nodePositions[nodeZeroNumber - 1] = g->numberOfNodes - 1;
+	//g->nodePositions[nodeLastNumber - 1] = 0;
 	
 	std::cout << "Finished node swap/deletion" << std::endl;
 	
 	g->numberOfNodes--;
 	
-	//std::cout << "Beginning Min_Heapify" << std::endl;
-	
-	//Min_Heapify(g, 0, g->numberOfNodes);
+	for(int i = 0; i < g->V; i++)
+	{
+		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+	}
+
 	
 	if (flag == 1)
 	{

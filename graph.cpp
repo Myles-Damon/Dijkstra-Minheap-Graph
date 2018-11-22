@@ -35,6 +35,10 @@ void Print_Graph(GRAPH* g)
 	}
 	else
 	{
+		for(int i = 0; i < g->V; i++)
+		{
+			g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+		}
 		std::cout << "Vertices: " << g->V << " Edges: " << g->E << "\n" << std::endl;
 		
 		///////////////////////////////////////////////////////////
@@ -55,14 +59,18 @@ void Print_Graph(GRAPH* g)
 		for (int i = 0; i < g->V; i++)
 		{
 			std::cout << "node: " << g->heapOfNodes[i].node << " \nweight: " << g->heapOfNodes[i].key << std::endl;
+			std::cout << "position: " << g->nodePositions[g->heapOfNodes[i].node] << std::endl;
 		}
 	}
 	return;
 }
 
-void Build_Graph(GRAPH* g, int flag)
+void Build_Graph(GRAPH* g, int flag) // basically heapify
 {
-	
+	for(int i = 0; i < g->V; i++)
+	{
+		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+	}
 	// "n" changed to "V"; Serves the same purpose (IE being the size of the array);
 	if (flag == 2)
 	{
@@ -77,7 +85,6 @@ void Build_Graph(GRAPH* g, int flag)
 	{
 		for (int i = g->V/2; i > -1; i--)
 		{
-
 			Min_Heapify(g, i, g->numberOfNodes);
 		}
 	}
@@ -98,10 +105,7 @@ void Dijkstra(GRAPH* g)
 		findShortestEdge(g, g->heapOfNodes[0].node);
 		//Min_Heapify(g, 0, g->numberOfNodes);
 		Delete_Min(g, 1);		
-		Build_Graph(g, 1);		
-		
-
-
+		Build_Graph(g, 1); // heapify		
 	}
 }
 
@@ -113,6 +117,11 @@ void Initialize_Single_Source(GRAPH* g, int source)
 		g->heapOfNodes[i] =ELEMENT(i + 1, INF, NULL);
 	}
 	g->heapOfNodes[source].key = 0; // distance from source to source = 0;
+	Build_Graph(g, 0);
+	for(int i = 0; i < g->V; i++)
+	{
+		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+	}
 }
 
 GRAPH* Initialize_Graph(int vertices, int edges)
@@ -127,7 +136,6 @@ GRAPH* Initialize_Graph(int vertices, int edges)
 		g->adj_list[i] = nullptr;
 		g->nodePositions[i] = i;
 	}
-	
 	return g;
 }
 
@@ -139,18 +147,27 @@ void findShortestEdge(GRAPH* g, int u)
 	
 	while(edgeTraversal != nullptr)
 	{
+		for(int i = 0; i < g->V; i++)
+		{
+			g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+		}
 		std::cout << "edge from: " << g->heapOfNodes[0].node << " to: " << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << " with weight: " << edgeTraversal->weight << "   " << std::endl;
 		if (edgeTraversal->weight + g->heapOfNodes[0].key < g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key)
 		{
-			std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << std::endl;
+			//std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << std::endl;
 			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key = g->heapOfNodes[0].key + edgeTraversal->weight;
 			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].pi = u - 1;
-			std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key << std::endl;
+			//std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key << std::endl;
 		}
 		edgeTraversal = edgeTraversal->next;
 	}
 	
-	std::cout << "did" << std::endl;
+	for(int i = 0; i < g->V; i++)
+	{
+		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+	}
+	
+	//std::cout << "did" << std::endl;
 	Print_Graph(g);
 	
 	return;
