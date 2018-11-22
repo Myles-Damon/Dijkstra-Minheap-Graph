@@ -59,7 +59,7 @@ void Print_Graph(GRAPH* g)
 		for (int i = 0; i < g->V; i++)
 		{
 			std::cout << "node: " << g->heapOfNodes[i].node << " \nweight: " << g->heapOfNodes[i].key << std::endl;
-			std::cout << "position: " << g->nodePositions[g->heapOfNodes[i].node] << std::endl;
+			std::cout << "position: " << g->nodePositions[g->heapOfNodes[i].node - 1] << std::endl;
 		}
 	}
 	return;

@@ -161,6 +161,14 @@ int main()
 				Dijkstra(graph);
 				std::cout << "Graph sorting complete" << std::endl;
 			}
+			if (w == 0)
+			{
+				std::cout << "Length: " << graph->heapOfNodes[graph->nodePositions[v - 1]].key << std::endl;
+			}
+			if (w == 1)
+			{
+				std::cout << "PATH: ";
+			}
 		}
 		else if (c == 'K' || c == 'k')
 		{

@@ -69,38 +69,37 @@ void Min_Heapify(GRAPH* g, int i, int n)
 	{
 		return;
 	}
+	/*
 	if (n < 3)
 	{
 		if (n == 2)
 		{
-			L = 1;
-			if (g->heapOfNodes[L].key < g->heapOfNodes[i].key)
+			if (g->heapOfNodes[1].key < g->heapOfNodes[0].key)
 			{
-				smallest = L;
-				ELEMENT temp = g->heapOfNodes[i];
-				g->heapOfNodes[i] = g->heapOfNodes[smallest];
-				g->heapOfNodes[smallest] = temp;
-				//g->nodePositions[g->heapOfNodes[smallest].node - 1] = i;
-				//g->nodePositions[g->heapOfNodes[i].node - 1] = smallest;
+				ELEMENT temp = g->heapOfNodes[0];
+				g->heapOfNodes[0] = g->heapOfNodes[1];
+				g->heapOfNodes[1] = temp;
+				
 				for(int i = 0; i < g->V; i++)
 				{
 					g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 				}
 				return;
 			}
+			return;
 		}
 		else
 		{
 			return;
 		}
 	}
-	if (i == 0)
+	else if (i == 0)
 	{
 		
 		L = 1;
 		R = 2;
-		smallest = i;
-	}
+		smallest = 0;
+	}*/
 	else
 	{
 		L = 2*i;
@@ -124,15 +123,8 @@ void Min_Heapify(GRAPH* g, int i, int n)
 	{
 		
 		ELEMENT temp = g->heapOfNodes[i];
-		
-		// OK, I WROTE THIS POINTER SWAP WHEN I WAS VERY TIRED AND I'M NOT EVEN 50% SURE I DID IT CORRECTLY
-		// NEED TO RECHECK THIS IN THE MORNING
-		
-		// RECHECKED, PRETTY SURE I FIXED IT
 		g->heapOfNodes[i] = g->heapOfNodes[smallest];
 		g->heapOfNodes[smallest] = temp;
-		//g->nodePositions[g->heapOfNodes[smallest].node - 1] = i;
-		//g->nodePositions[g->heapOfNodes[i].node - 1] = smallest;
 		
 		for(int i = 0; i < g->V; i++)
 		{
@@ -367,21 +359,16 @@ void Delete_Min(GRAPH* g, int flag)
 		Print_Graph(g);
 	}
 	
-	//int nodeZeroNumber = g->heapOfNodes[0].node; // Decide which node it is
-	//int nodeLastNumber = g->heapOfNodes[g->numberOfNodes - 1].node; // Figure out which node the last node is
-	
+
 	std::cout << "Assigned node numbers" << std::endl;
 	
 	ELEMENT temp = g->heapOfNodes[0];
 	
 	std::cout << "Created temporary node" << std::endl;
 	
-	// OK, I WROTE THIS POINTER SWAP WHEN I WAS VERY TIRED AND I'M NOT EVEN 50% SURE I DID IT CORRECTLY
-	// NEED TO RECHECK THIS IN THE MORNING
+
 	g->heapOfNodes[0] = g->heapOfNodes[g->numberOfNodes - 1];
 	g->heapOfNodes[g->numberOfNodes - 1] = temp;
-	//g->nodePositions[nodeZeroNumber - 1] = g->numberOfNodes - 1;
-	//g->nodePositions[nodeLastNumber - 1] = 0;
 	
 	std::cout << "Finished node swap/deletion" << std::endl;
 	
