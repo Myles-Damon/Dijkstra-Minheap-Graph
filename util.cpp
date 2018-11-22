@@ -39,7 +39,7 @@ char nextCommand(int *u, int *v, int *w, HEAP* heap, FILE* file)
 		// Build the heap 
 		if (c == 'R' || c == 'r')
 		{
-			scanf("%d", w);
+			//scanf("%d", w); // 'R' Doesn't take a flag in assignment 2
 			break;
 		}
 		

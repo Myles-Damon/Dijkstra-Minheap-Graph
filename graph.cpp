@@ -35,10 +35,10 @@ void Print_Graph(GRAPH* g)
 	}
 	else
 	{
-		for(int i = 0; i < g->V; i++)
+		/*for(int i = 0; i < g->V; i++)
 		{
 			g->nodePositions[g->heapOfNodes[i].node - 1] = i;
-		}
+		}*/
 		std::cout << "Vertices: " << g->V << " Edges: " << g->E << "\n" << std::endl;
 		
 		///////////////////////////////////////////////////////////
@@ -55,12 +55,12 @@ void Print_Graph(GRAPH* g)
 			}
 			std::cout << std::endl;
 		}
-		
+		/*
 		for (int i = 0; i < g->V; i++)
 		{
 			std::cout << "node: " << g->heapOfNodes[i].node << " \nweight: " << g->heapOfNodes[i].key << std::endl;
 			std::cout << "position: " << g->nodePositions[g->heapOfNodes[i].node - 1] << std::endl;
-		}
+		}*/
 	}
 	return;
 }
@@ -114,9 +114,13 @@ void Initialize_Single_Source(GRAPH* g, int source)
 	// initialize all nodes (ELEMENTs) to un-relaxed state
 	for (int i = 0; i < g->V; i++)
 	{
-		g->heapOfNodes[i] =ELEMENT(i + 1, INF, NULL);
+		g->heapOfNodes[i] = ELEMENT(i + 1, INF, NULL);
 	}
-	g->heapOfNodes[source].key = 0; // distance from source to source = 0;
+	for(int i = 0; i < g->V; i++)
+	{
+		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+	}	
+	g->heapOfNodes[g->nodePositions[source]].key = 0; // distance from source to source = 0; source is already u - 1 so I don't need to put "source - 1" in nodePositions[]
 	Build_Graph(g, 0);
 	for(int i = 0; i < g->V; i++)
 	{

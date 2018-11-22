@@ -10,6 +10,8 @@
 #include "util.h"
 #include "graph.h"
 
+#define INF 2147283647
+
 #pragma GCC diagnostic ignored "-Wpointer-arith"
 #pragma GCC diagnostic ignored "-Wconversion-null"
 
@@ -92,12 +94,10 @@ int main()
 				//char flag = w;
 				// Read first line and get number of vertices and edges
 				fscanf(file, "%i", &v);
-				std::cout << "vertices: " << v << std::endl;
+				
 				fscanf(file, "%i", &u);
-				std::cout << "edges: " << u << std::endl;
+
 				graph = Initialize_Graph(v, u);
-				 
-				std::cout << "graph initialized" << std::endl;
 				
 				// Initialize adjacency list
 				while (fscanf(file, "%i %i %i", &u, &v, &w) && q < graph->E)
@@ -109,6 +109,18 @@ int main()
 					// into the linked list at the top while preserving the linked list's order
 					graph->adj_list[u - 1] = newEdge;
 					q++;
+				}
+				if (q != graph->E)
+				{
+					std::cout << "ERROR: The number of edges is less than was specified in the beginning of the file." << std::endl;
+					// Need to reset everything to NULL/nullptr and/or free up all the memory so that the other failsafes don't get bypassed
+				}
+				else
+				{
+					std::cout << "edges: " << graph->E << std::endl;
+					std::cout << "vertices: " << graph->V << std::endl;
+					std::cout << "graph initialized" << std::endl;					
+					
 				}
 
 			}
@@ -160,15 +172,23 @@ int main()
 				// Need to call Dijkstra, not do whatever the fuck I was doing above...
 				Dijkstra(graph);
 				std::cout << "Graph sorting complete" << std::endl;
+				if (w == 0)
+				{
+					std::cout << "Length: " << graph->heapOfNodes[graph->nodePositions[v - 1]].key << std::endl;
+				}
+				if (w == 1)
+				{
+					if (graph->heapOfNodes[graph->nodePositions[v - 1]].key == INF)
+					{
+						std::cout << "Sorry, node " << v << " isn't reachable from node " << u << "." << std::endl;
+					}
+					else
+					{
+					std::cout << "PATH: ";
+					}
+				}				
 			}
-			if (w == 0)
-			{
-				std::cout << "Length: " << graph->heapOfNodes[graph->nodePositions[v - 1]].key << std::endl;
-			}
-			if (w == 1)
-			{
-				std::cout << "PATH: ";
-			}
+
 		}
 		else if (c == 'K' || c == 'k')
 		{
