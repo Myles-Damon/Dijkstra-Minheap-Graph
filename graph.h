@@ -45,8 +45,8 @@ struct GRAPH{
 	int SNS; // sorted_node_size (size of sortedNodes)
 	int* nodePositions; // needed in order to keep track of where all those nodes are after I start heapifying shit
 	ELEMENT* heapOfNodes; //pointer of type ELEMENT; NOT a HEAP struct!
-	//ELEMENT* sortedNodes; // "S" in the Dijkstra algorithm
-	LIST** adj_list; // depreciated
+	ELEMENT* sortedNodes; // "S" in the Dijkstra algorithm
+	LIST** adj_list; // not depreciated
 	
 	GRAPH(int v, int e);
 };

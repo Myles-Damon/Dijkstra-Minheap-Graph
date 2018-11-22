@@ -22,7 +22,7 @@ ELEMENT::ELEMENT(int n, int d, int p) : node(n), key(d), pi(p) {}
 LIST::LIST(int weightIn, int neighborIn) : weight(weightIn), neighbor(neighborIn), next(nullptr) {}
 LIST::LIST(int weightIn, int neighborIn, LIST* nextIn) : weight(weightIn), neighbor(neighborIn), next(nextIn) {} // Might need to have "next" be initialized to null and assigned afterwards
 
-GRAPH::GRAPH(int v, int e) : V(v), E(e), numberOfNodes(v), SNS(0), nodePositions ((int*) malloc(sizeof(int) * V)), heapOfNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V)), adj_list ((LIST**) malloc(sizeof(LIST*) * V))/*, sortedNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V))*/  {}
+GRAPH::GRAPH(int v, int e) : V(v), E(e), numberOfNodes(v), SNS(0), nodePositions ((int*) malloc(sizeof(int) * V)), heapOfNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V)), sortedNodes ((ELEMENT*) malloc(sizeof(ELEMENT) * V)), adj_list ((LIST**) malloc(sizeof(LIST*) * V))  {}
 
 ADJ_LIST::ADJ_LIST(LIST* headPtr) : head(headPtr) {}
 
@@ -60,36 +60,8 @@ void Print_Graph(GRAPH* g)
 	return;
 }
 
-void Build_Graph(GRAPH* g, /*ELEMENT* Array, int s, int m, */int flag)
+void Build_Graph(GRAPH* g, int flag)
 {
-	/* Removed since I won't be re-sizing the graph's array
-	// N IS THE SIZE OF ARRAY Array[]
-	if (graph->V < n)
-	{
-		std::cout << "Heap capacity is less than array size. Resizing heap" << std::endl;
-		// gets the result of the floor function of log2(n) (floor function == casting float to int)
-		// adds 1, and then uses that as the lowest exponent of 
-		// 2 which will leave the heap with enough capacity to 
-		// take in the new array items once the size of the 
-		// heap is changed via realloc()
-		
-		int c = (int)std::log2(n) + 1;
-		
-		//graph->heapOfNodes = (ELEMENT*)realloc(heap->H, sizeof(ELEMENT) * (std::pow(2,c)));
-		//heap->capacity = std::pow(2,c);
-	}
-	*/
-	/* Unneeded since nodes are initialized with key = INF && the rest of their data is set up through relaxation
-	std::cout << "Filling heap with elements from array" << std::endl;
-
-	for (int i = 0; i < n; i++)
-	{
-
-		graph->heapOfNodes[i] = ELEMENT(Array[i].key);
-		//heap->size++;
-
-	}
-	*/
 	
 	// "n" changed to "V"; Serves the same purpose (IE being the size of the array);
 	if (flag == 2)
@@ -124,7 +96,12 @@ void Dijkstra(GRAPH* g)
 	for (int i = 0; i < g->V; i++)
 	{
 		findShortestEdge(g, g->heapOfNodes[0].node);
-		Min_Heapify(g, 0, g->numberOfNodes);
+		//Min_Heapify(g, 0, g->numberOfNodes);
+		Delete_Min(g, 1);		
+		Build_Graph(g, 1);		
+		
+
+
 	}
 }
 
@@ -154,22 +131,29 @@ GRAPH* Initialize_Graph(int vertices, int edges)
 	return g;
 }
 
-/*int*/void findShortestEdge(GRAPH* g, int u/*, int v*/)
+void findShortestEdge(GRAPH* g, int u)
 {
-	std::cout << "finding shortest edge" << g->nodePositions[0] << std::endl;
-	//int shortestDistance = INF;
+	
+	std::cout << "finding shortest edge from " << g->heapOfNodes[0].node << std::endl;
 	LIST* edgeTraversal = g->adj_list[u - 1];
+	
 	while(edgeTraversal != nullptr)
 	{
-		if (edgeTraversal->weight < g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor]].key + g->heapOfNodes[g->nodePositions[u - 1]].key/*  == v && edgeTraversal->weight < shortestDistance*/)
+		std::cout << "edge from: " << g->heapOfNodes[0].node << " to: " << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << " with weight: " << edgeTraversal->weight << "   " << std::endl;
+		if (edgeTraversal->weight + g->heapOfNodes[0].key < g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key)
 		{
-			//shortestDistance = edgeTraversal->weight;
-			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor]].key = g->heapOfNodes[g->nodePositions[u - 1]].key + edgeTraversal->weight;
+			std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << std::endl;
+			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key = g->heapOfNodes[0].key + edgeTraversal->weight;
+			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].pi = u - 1;
+			std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key << std::endl;
 		}
 		edgeTraversal = edgeTraversal->next;
 	}
+	
 	std::cout << "did" << std::endl;
-	return;// shortestDistance;
+	Print_Graph(g);
+	
+	return;
 }
 
 void Relax(GRAPH* g, int u, int v, int w)

@@ -77,6 +77,7 @@ int main()
 			}*/
 			else
 			{
+				
 				//char buffer[10];
 				std::cout << "COMMAND: " << c <</* " " << f << */std::endl;
 				//std::cout << "Heap capacity: " << heap->capacity << std::endl;
@@ -88,23 +89,19 @@ int main()
 				*/ // END Stuff for heap, not graph
 				// fill up array
 				int q = 0;
-				char flag = w;
+				//char flag = w;
 				// Read first line and get number of vertices and edges
 				fscanf(file, "%i", &v);
 				std::cout << "vertices: " << v << std::endl;
 				fscanf(file, "%i", &u);
 				std::cout << "edges: " << u << std::endl;
 				graph = Initialize_Graph(v, u);
+				 
 				std::cout << "graph initialized" << std::endl;
 				
 				// Initialize adjacency list
 				while (fscanf(file, "%i %i %i", &u, &v, &w) && q < graph->E)
 				{
-					/*if(graph->adj_list[u] == nullptr)
-					{
-						std::cout << "it's a null ptr" << std::endl;
-					}*/
-					//LIST* nullListPtr = nullptr;
 					
 					// initializes an edge and sets its "next" pointer to the current head
 					LIST* newEdge = new LIST(w, v, graph->adj_list[u - 1]);
@@ -113,29 +110,7 @@ int main()
 					graph->adj_list[u - 1] = newEdge;
 					q++;
 				}
-				//std::cout << graph->adj_list[0]->neighbor << " " << graph->adj_list[0]->weight << std::endl;
-				/*
-				while (fgets(buffer, 10, file) && q < (length))
-				{
-					A[q].key = atoi(buffer);
-					std::cout << "A[" << q << "] key: " << A[q].key << std::endl;
-					q++;
-				}
-				
-				Build_Heap(heap, A, q, w);
-				*/
-				
-				
-				Initialize_Single_Source(graph, 0); // for testing purposes. Should be moved later
-				Build_Graph(graph, flag);
-				
-				
-				/*
-				if (length < heap->size)
-				{
-					std::cout << "Warning, number of elements in the file is less than as specified in the beginning of the file" << std::endl;
-				}
-				*/
+
 			}
 		}
 		else if (c == 'W' || c == 'w')
@@ -177,12 +152,10 @@ int main()
 			}
 			else
 			{
+				Initialize_Single_Source(graph, u - 1);
+				//Build_Graph(graph, w);
 				std::cout << "Finding the shortest path" << std::endl;
 				// find the shortest path;
-				/*for (int i = 0; i < graph->V; i++)
-				{
-					Delete_Min(graph, w);
-				}*/
 				
 				// Need to call Dijkstra, not do whatever the fuck I was doing above...
 				Dijkstra(graph);
