@@ -357,6 +357,11 @@ void Delete_Min(GRAPH* g, int flag)
 	{
 		std::cout << "Printing graph before deletion of min node" << std::endl;
 		Print_Graph(g);
+		for(int i = 0; i < g->V; i++)
+		{
+			//g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+			std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
+		}
 	}
 	
 
@@ -378,7 +383,11 @@ void Delete_Min(GRAPH* g, int flag)
 	{
 		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 	}
-
+	for(int i = 0; i < g->V; i++)
+	{
+		//g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+		std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
+	}
 	
 	if (flag == 1)
 	{

@@ -36,6 +36,9 @@ int main()
 	FILE* file = fopen("Ginput.txt", "r");	
 	int u, v, w;
 	char c = 'P';
+	
+	bool dijkBool = false;
+	
 	HEAP* heap = nullptr;
 	GRAPH* graph = nullptr;
 	
@@ -162,29 +165,93 @@ int main()
 			{
 				std::cout << "Please enter valid nodes" << std::endl;
 			}
+			else if(w != 0 && w != 1)
+			{
+				std::cout << "Error: Invalid flag value" << std::endl;
+			}
 			else
 			{
-				Initialize_Single_Source(graph, u - 1);
-				//Build_Graph(graph, w);
-				std::cout << "Finding the shortest path" << std::endl;
-				// find the shortest path;
-				
-				// Need to call Dijkstra, not do whatever the fuck I was doing above...
-				Dijkstra(graph);
-				std::cout << "Graph sorting complete" << std::endl;
-				if (w == 0)
+				if (u == v)
 				{
-					std::cout << "Length: " << graph->heapOfNodes[graph->nodePositions[v - 1]].key << std::endl;
-				}
-				if (w == 1)
-				{
-					if (graph->heapOfNodes[graph->nodePositions[v - 1]].key == INF)
+					if (w == 0)
 					{
-						std::cout << "Sorry, node " << v << " isn't reachable from node " << u << "." << std::endl;
+						std::cout << "LENGTH: 0" << std::endl;
 					}
 					else
 					{
-					std::cout << "PATH: ";
+						std::cout << "PATH: " << u << std::endl;
+					}
+				}
+				else
+				{
+					//graph = Initialize_Graph(v, u);
+				
+					// Initialize adjacency list
+					/*
+					fscanf(file, "%i", &v);
+					fscanf(file, "%i", &u);
+					graph = Initialize_Graph(v, u);
+					int q = 0;
+					while (fscanf(file, "%i %i %i", &u, &v, &w) && q < graph->E)
+					{
+						// initializes an edge and sets its "next" pointer to the current head
+						LIST* newEdge = new LIST(w, v, graph->adj_list[u - 1]);
+						// sets the current head to the newly initialized edge, thereby inserting it 
+						// into the linked list at the top while preserving the linked list's order
+						graph->adj_list[u - 1] = newEdge;
+						q++;
+					}
+					
+					
+					if (dijkBool == false)
+					{
+						Initialize_Single_Source(graph, 1)
+					}*/
+					
+					//I think I need to initialize this at u = 1 and then never call it or 
+					//Dijkstra again afterwards and just use the .pi attributes 
+					Initialize_Single_Source(graph, u - 1);
+					//Build_Graph(graph, w);
+					std::cout << "Finding the shortest path" << std::endl;
+					// find the shortest path;
+				
+					// Need to call Dijkstra, not do whatever the fuck I was doing above...
+					Dijkstra(graph);
+					std::cout << "Graph sorting complete" << std::endl;
+					if (w == 0)
+					{
+						if (graph->heapOfNodes[graph->nodePositions[v - 1]].key == INF)
+						{
+							std::cout << "Sorry, node " << v << " isn't reachable from node " << u << "." << std::endl;
+						}
+						else
+						{
+							std::cout << "Length: " << graph->heapOfNodes[graph->nodePositions[v - 1]].key << std::endl;
+						}
+					}
+					if (w == 1)
+					{
+						if (graph->heapOfNodes[graph->nodePositions[v - 1]].key == INF)
+						{
+							std::cout << "Sorry, node " << v << " isn't reachable from node " << u << "." << std::endl;
+						}
+						else
+						{
+							
+						std::cout << "PATH: " << v;
+						ELEMENT nodeTrav = graph->heapOfNodes[graph->nodePositions[v - 1]];
+						int z = 0;
+						
+						do {
+							nodeTrav = graph->heapOfNodes[graph->nodePositions[nodeTrav.pi]];
+							std::cout << " <- " << nodeTrav.node;
+							
+							z++;
+						} while (nodeTrav.node != u && z < 50);
+						// could make a recursive function which prints the path left to right
+						// as it unspirals...
+						
+						}
 					}
 				}				
 			}

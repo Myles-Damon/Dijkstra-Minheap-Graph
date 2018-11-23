@@ -112,6 +112,7 @@ void Dijkstra(GRAPH* g)
 void Initialize_Single_Source(GRAPH* g, int source)
 {
 	// initialize all nodes (ELEMENTs) to un-relaxed state
+	g->numberOfNodes = g->V;
 	for (int i = 0; i < g->V; i++)
 	{
 		g->heapOfNodes[i] = ELEMENT(i + 1, INF, NULL);
@@ -121,10 +122,16 @@ void Initialize_Single_Source(GRAPH* g, int source)
 		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 	}	
 	g->heapOfNodes[g->nodePositions[source]].key = 0; // distance from source to source = 0; source is already u - 1 so I don't need to put "source - 1" in nodePositions[]
+	for(int i = 0; i < g->V; i++)
+	{
+		//g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+		std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
+	}
 	Build_Graph(g, 0);
 	for(int i = 0; i < g->V; i++)
 	{
 		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
+		//std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
 	}
 }
 
