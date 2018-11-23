@@ -1,6 +1,6 @@
 // Util.h
 
-// I have no idea what functions this implements
+// I have no idea what functions this is supposed to implement
 
 #ifndef _UTIL_H_INCLUDED
 #define _UTIL_H_INCLUDED

@@ -62,14 +62,21 @@ void Print_Heap(HEAP* h)
 //WIP conversion of Max_Heapify to Min_Heapify;
 void Min_Heapify(GRAPH* g, int i, int n)
 {
-
-	int L, R, smallest;	
 	// n is heap size passed as an argument
-	if(!(i < n))
+
+	
+	int L, R, smallest;	
+	
+	if(!(i < n)) // I also don't need this line either...
 	{
+		//std::cout << "Error in the GRAPH Min_Heapify. This should never be printed" << std::endl;
 		return;
 	}
-	/*
+	/* (UNUSED SAFEGUARD)
+	// I forgot that I already implemented safeguards  in the 
+	// original heapify algorith which protected against 
+	// exactly the kind of things this was gonna....
+ 
 	if (n < 3)
 	{
 		if (n == 2)
@@ -338,6 +345,9 @@ ELEMENT Delete_Min(HEAP* heap, int flag)
 // Graph-ified version of Delete_Min
 void Delete_Min(GRAPH* g, int flag)
 {
+	// There's no reason for this to take a flag argument
+	// since there's no command-line command to delete a node
+	
 	// So... I'm thinking I should just set the "node to be removed"
 	// as the last node in the heap and then decrease the heap_size
 	// variable of GRAPH so that I don't have to create a second 
@@ -347,35 +357,39 @@ void Delete_Min(GRAPH* g, int flag)
 	// delete the node, it just puts it at the back and changes
 	// the node's position thing in GRAPH.
 	
+	// This should never be called
 	if (g->heapOfNodes == nullptr || g->V < 1)
 	{
 		std::cout << "error: graph empty (sorted) or uninitialized" << std::endl;
-		return/* NULL*/;
+		std::cout << "also, this should never be called..." << std::endl;
+		return;
 	}
 	
-	if (flag == 1)
+	/*DEBUGGINGif (flag == 1)
 	{
-		std::cout << "Printing graph before deletion of min node" << std::endl;
+		std::cout << "Printing graph before deletion of min node (flag == 1)" << std::endl;
 		Print_Graph(g);
-		for(int i = 0; i < g->V; i++)
-		{
-			//g->nodePositions[g->heapOfNodes[i].node - 1] = i;
-			std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
-		}
-	}
+		
+		//DEBUGGING
+		//for(int i = 0; i < g->V; i++)
+		//{
+			//std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
+		//}
+		
+	}*/
 	
 
-	std::cout << "Assigned node numbers" << std::endl;
+	//DEBUGGINGstd::cout << "Assigned node numbers" << std::endl;
 	
 	ELEMENT temp = g->heapOfNodes[0];
 	
-	std::cout << "Created temporary node" << std::endl;
+	//DEBUGGINGstd::cout << "Created temporary node" << std::endl;
 	
 
 	g->heapOfNodes[0] = g->heapOfNodes[g->numberOfNodes - 1];
 	g->heapOfNodes[g->numberOfNodes - 1] = temp;
 	
-	std::cout << "Finished node swap/deletion" << std::endl;
+	//DEBIGGINGstd::cout << "Finished node swap/deletion" << std::endl;
 	
 	g->numberOfNodes--;
 	
@@ -383,25 +397,28 @@ void Delete_Min(GRAPH* g, int flag)
 	{
 		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 	}
+	
+	/* DEBUGGING
 	for(int i = 0; i < g->V; i++)
 	{
 		//g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 		std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
 	}
+	*/ 
 	
-	if (flag == 1)
+	/*DEBUGGINGif (flag == 1)
 	{
 		Print_Graph(g);
-	}
+	}*/
 	return;
 	
-	// NEED TO ADD TO sortedNodeList in the correct position 
+	// NEED TO ADD TO sortedNodeList IN THE CORRECT POSITION 
 	// IE JUST PUT IT IN THE ARRAY IN THE POSITION WHICH IT'S 
 	// NODE ATTRIBUTE SUGGESTS
 	
 	// OR JUST DO WHAT I ENDED UP DOING, WHICH WAS TO JUST PUT IT AT THE END OF THE LIST 
 	// AND THEN CHANGE THE VARIABLE WHICH REPRESENTS THE SIZE OF THE HEAP SO THAT I DON'T 
-	// HAVE TO USE MORE THAN ONE ARRAY/HEAP
+	// HAVE TO USE MORE THAN ONE ARRAY/HEAP AND I DON'T HAVE TO DO CROSS-SET OPERATIONS
 	
 }
 

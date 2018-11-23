@@ -20,7 +20,7 @@
 	ELEMENT(int n);
 	ELEMENT(int n, int d, int p);
 
-};*/ //Moved to heap.h???
+};*/ //Moved to graph.h
 
 struct HEAP{
 	int capacity;

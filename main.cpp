@@ -15,6 +15,7 @@
 #pragma GCC diagnostic ignored "-Wpointer-arith"
 #pragma GCC diagnostic ignored "-Wconversion-null"
 
+//Used at the end for freeing up memory in a nice, concise way
 void deleteList(LIST* lpt)
 	{
 		if(lpt == nullptr)
@@ -37,12 +38,12 @@ int main()
 	int u, v, w;
 	char c = 'P';
 	
-	bool dijkBool = false;
+	bool rBool = false;
 	
 	HEAP* heap = nullptr;
 	GRAPH* graph = nullptr;
 	
-	while(c != 'S')
+	while(c != 'S' && c != 's')
 	{
 		printf("\nInput a command: ");
 		c = nextCommand(&u, &v, &w, heap, file);
@@ -83,48 +84,66 @@ int main()
 			else
 			{
 				
-				//char buffer[10];
+				
 				std::cout << "COMMAND: " << c <</* " " << f << */std::endl;
 				//std::cout << "Heap capacity: " << heap->capacity << std::endl;
 				/* Stuff for heap, not graph
 				// get # of items in array & dynamically create array
+				char buffer[10];
 				fgets(buffer, 10, file);
 				int length = atoi(buffer);
 				ELEMENT* A = (ELEMENT*) malloc((length + 1) * sizeof(ELEMENT));
 				*/ // END Stuff for heap, not graph
 				// fill up array
-				int q = 0;
+				
 				//char flag = w;
 				// Read first line and get number of vertices and edges
-				fscanf(file, "%i", &v);
 				
-				fscanf(file, "%i", &u);
-
-				graph = Initialize_Graph(v, u);
-				
-				// Initialize adjacency list
-				while (fscanf(file, "%i %i %i", &u, &v, &w) && q < graph->E)
+				if (rBool == true)
 				{
-					
-					// initializes an edge and sets its "next" pointer to the current head
-					LIST* newEdge = new LIST(w, v, graph->adj_list[u - 1]);
-					// sets the current head to the newly initialized edge, thereby inserting it 
-					// into the linked list at the top while preserving the linked list's order
-					graph->adj_list[u - 1] = newEdge;
-					q++;
-				}
-				if (q != graph->E)
-				{
-					std::cout << "ERROR: The number of edges is less than was specified in the beginning of the file." << std::endl;
-					// Need to reset everything to NULL/nullptr and/or free up all the memory so that the other failsafes don't get bypassed
+					// Do nothing. The file has already been scanned
 				}
 				else
 				{
+					// Get number of vertices & edges
+					// Then, initialize the graph
+					fscanf(file, "%i", &v);
+					fscanf(file, "%i", &u);
+
+					graph = Initialize_Graph(v, u);
+				
+					// Initialize adjacency list
+					int q = 0;
+					while (fscanf(file, "%i %i %i", &u, &v, &w) != EOF && q < graph->E)
+					{
+					
+						// initializes an edge and sets its "next" pointer to the current head
+						LIST* newEdge = new LIST(w, v, graph->adj_list[u - 1]);
+						// sets the current head to the newly initialized edge, thereby inserting it 
+						// into the linked list at the top while preserving the linked list's order
+						graph->adj_list[u - 1] = newEdge;
+						q++;
+					
+					}
+					if (q != graph->E)
+					{
+					
+						std::cout << "ERROR: The number of edges is less than was specified in the beginning of the file." << std::endl;
+						// Need to reset everything to NULL/nullptr and/or free up all the memory so that the other failsafes don't get bypassed
+				
+					}
+					rBool = true; // Set so that you don't read the graph twice
+					// (really, it's because I don't want to have to reset fscanf and the file pointer
+					q = 0; // soft reset so that you can type 'R' twice if you're so inclined...
+				}
+				/*DEBUGGINGelse
+				{
+					
 					std::cout << "edges: " << graph->E << std::endl;
 					std::cout << "vertices: " << graph->V << std::endl;
 					std::cout << "graph initialized" << std::endl;					
 					
-				}
+				}*/
 
 			}
 		}
@@ -164,6 +183,11 @@ int main()
 			else if(!(u < graph->V + 1) || !(v < graph->V + 1)) // u = s; v = t;
 			{
 				std::cout << "Please enter valid nodes" << std::endl;
+				
+				if(w != 0 && w != 1)
+				{
+					std::cout << "Error: Invalid flag value" << std::endl;
+				}
 			}
 			else if(w != 0 && w != 1)
 			{
@@ -184,40 +208,18 @@ int main()
 				}
 				else
 				{
-					//graph = Initialize_Graph(v, u);
-				
-					// Initialize adjacency list
-					/*
-					fscanf(file, "%i", &v);
-					fscanf(file, "%i", &u);
-					graph = Initialize_Graph(v, u);
-					int q = 0;
-					while (fscanf(file, "%i %i %i", &u, &v, &w) && q < graph->E)
-					{
-						// initializes an edge and sets its "next" pointer to the current head
-						LIST* newEdge = new LIST(w, v, graph->adj_list[u - 1]);
-						// sets the current head to the newly initialized edge, thereby inserting it 
-						// into the linked list at the top while preserving the linked list's order
-						graph->adj_list[u - 1] = newEdge;
-						q++;
-					}
-					
-					
-					if (dijkBool == false)
-					{
-						Initialize_Single_Source(graph, 1)
-					}*/
 					
 					//I think I need to initialize this at u = 1 and then never call it or 
 					//Dijkstra again afterwards and just use the .pi attributes 
 					Initialize_Single_Source(graph, u - 1);
-					//Build_Graph(graph, w);
-					std::cout << "Finding the shortest path" << std::endl;
+					//DEBUGGINGstd::cout << "Finding the shortest path" << std::endl;
 					// find the shortest path;
 				
 					// Need to call Dijkstra, not do whatever the fuck I was doing above...
 					Dijkstra(graph);
-					std::cout << "Graph sorting complete" << std::endl;
+					
+					//DEBUGGINGstd::cout << "Graph sorting complete" << std::endl;
+					
 					if (w == 0)
 					{
 						if (graph->heapOfNodes[graph->nodePositions[v - 1]].key == INF)
@@ -307,18 +309,14 @@ int main()
 			deleteList(lpt);
 		}
 		
+		// FLY MY MEMORY! BE...
 		free(graph->adj_list);
-		
-		/*for(int i = 0; i < graph->V; i++)
-		{
-			free(graph->heapOfNodes[i]);
-			free(graph->nodePositions[i]);
-		}*/
-		
 		free(graph->heapOfNodes);
 		free(graph->nodePositions);
-		
 		free(graph);
+		
+		//Memory-freeing to-do list in pseudocode
+		//----------------------------------------
 		//need to recursively free/delete every LIST element I've created in adj_list
 		//deleteList(LIST* lpt){if(LIST*==nullptr){return;}else{deleteList(lpt->next); free(lpt);}}
 		//free adj_list itself

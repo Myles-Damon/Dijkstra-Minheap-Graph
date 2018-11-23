@@ -35,15 +35,14 @@ void Print_Graph(GRAPH* g)
 	}
 	else
 	{
-		/*for(int i = 0; i < g->V; i++)
-		{
-			g->nodePositions[g->heapOfNodes[i].node - 1] = i;
-		}*/
+
 		std::cout << "Vertices: " << g->V << " Edges: " << g->E << "\n" << std::endl;
 		
 		///////////////////////////////////////////////////////////
 		// NOT DONE! Need to format output to match requirements //
 		///////////////////////////////////////////////////////////
+		
+		// Actually, it's pretty much done
 		for (int i = 0; i < g->V; i++)
 		{
 			std::cout << i + 1 << ": ";
@@ -55,7 +54,7 @@ void Print_Graph(GRAPH* g)
 			}
 			std::cout << std::endl;
 		}
-		/*
+		/* DEBUGGING
 		for (int i = 0; i < g->V; i++)
 		{
 			std::cout << "node: " << g->heapOfNodes[i].node << " \nweight: " << g->heapOfNodes[i].key << std::endl;
@@ -67,17 +66,18 @@ void Print_Graph(GRAPH* g)
 
 void Build_Graph(GRAPH* g, int flag) // basically heapify
 {
+	
 	for(int i = 0; i < g->V; i++)
 	{
 		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 	}
-	// "n" changed to "V"; Serves the same purpose (IE being the size of the array);
+	
 	if (flag == 2)
 	{
 		for (int i = g->V/2; i > -1; i--)
 		{
 			Min_Heapify(g, i, g->numberOfNodes);
-			Print_Graph(g);
+			//DEBUGGINGPrint_Graph(g);
 		}		
 	}
 	
@@ -89,10 +89,10 @@ void Build_Graph(GRAPH* g, int flag) // basically heapify
 		}
 	}
 
-	if (flag == 1)
+	/*DEBUGGINGif (flag == 1)
 	{
 		Print_Graph(g);
-	}
+	}*/
 	
 	return;
 }
@@ -103,7 +103,6 @@ void Dijkstra(GRAPH* g)
 	for (int i = 0; i < g->V; i++)
 	{
 		findShortestEdge(g, g->heapOfNodes[0].node);
-		//Min_Heapify(g, 0, g->numberOfNodes);
 		Delete_Min(g, 1);		
 		Build_Graph(g, 1); // heapify		
 	}
@@ -111,8 +110,18 @@ void Dijkstra(GRAPH* g)
 
 void Initialize_Single_Source(GRAPH* g, int source)
 {
-	// initialize all nodes (ELEMENTs) to un-relaxed state
+	/* DESCRIPTION COMMENT
+	
+	
+	
+	*/
+	
+	// Explicitly set (g->numberOfNodes = g->V) so that when the graph
+	// needs to trace another path it can do so without messing up heapify (Build_Graph)
+	
 	g->numberOfNodes = g->V;
+	
+	// initialize all nodes (ELEMENTs) to un-relaxed state
 	for (int i = 0; i < g->V; i++)
 	{
 		g->heapOfNodes[i] = ELEMENT(i + 1, INF, NULL);
@@ -120,25 +129,26 @@ void Initialize_Single_Source(GRAPH* g, int source)
 	for(int i = 0; i < g->V; i++)
 	{
 		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
-	}	
-	g->heapOfNodes[g->nodePositions[source]].key = 0; // distance from source to source = 0; source is already u - 1 so I don't need to put "source - 1" in nodePositions[]
+	}
+	// distance from source to source = 0; source is already u - 1 so I don't need to put "source - 1" in nodePositions[]
+	g->heapOfNodes[g->nodePositions[source]].key = 0;	
+	/* DEBUGGING
 	for(int i = 0; i < g->V; i++)
 	{
-		//g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 		std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
 	}
+	*/
+	
 	Build_Graph(g, 0);
 	for(int i = 0; i < g->V; i++)
 	{
 		g->nodePositions[g->heapOfNodes[i].node - 1] = i;
-		//std::cout << "node: " << g->heapOfNodes[i].node << " key: " << g->heapOfNodes[i].key << std::endl;
 	}
 }
 
 GRAPH* Initialize_Graph(int vertices, int edges)
 {
 	GRAPH* g = new GRAPH(vertices, edges);
-	//LIST* nullListPtr = nullptr
 	/* need to separately initialize the edges I think*/
 	// NOPE to the above comment; Do need to add the edges 
 	// from the file separately though
@@ -152,8 +162,15 @@ GRAPH* Initialize_Graph(int vertices, int edges)
 
 void findShortestEdge(GRAPH* g, int u)
 {
+	/* DESCRIPTION COMMENT
 	
-	std::cout << "finding shortest edge from " << g->heapOfNodes[0].node << std::endl;
+	This kinda ended up just being both "find shortest edge" AND "relax"
+	I'm gonna leave it this way because I'm running low on time to polish 
+	this program before I submit it, but I do know how Dijkstra's works 
+	w/ respect to relaxing edges	
+	
+	*/
+	//DEBUGGINGstd::cout << "finding shortest edge from " << g->heapOfNodes[0].node << std::endl;
 	LIST* edgeTraversal = g->adj_list[u - 1];
 	
 	while(edgeTraversal != nullptr)
@@ -162,13 +179,11 @@ void findShortestEdge(GRAPH* g, int u)
 		{
 			g->nodePositions[g->heapOfNodes[i].node - 1] = i;
 		}
-		std::cout << "edge from: " << g->heapOfNodes[0].node << " to: " << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << " with weight: " << edgeTraversal->weight << "   " << std::endl;
+		//DEBUGGINGstd::cout << "edge from: " << g->heapOfNodes[0].node << " to: " << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << " with weight: " << edgeTraversal->weight << "   " << std::endl;
 		if (edgeTraversal->weight + g->heapOfNodes[0].key < g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key)
 		{
-			//std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].node << std::endl;
 			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key = g->heapOfNodes[0].key + edgeTraversal->weight;
 			g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].pi = u - 1;
-			//std::cout << g->heapOfNodes[g->nodePositions[edgeTraversal->neighbor - 1]].key << std::endl;
 		}
 		edgeTraversal = edgeTraversal->next;
 	}
@@ -179,7 +194,7 @@ void findShortestEdge(GRAPH* g, int u)
 	}
 	
 	//std::cout << "did" << std::endl;
-	Print_Graph(g);
+	//DEBUGGINGPrint_Graph(g);
 	
 	return;
 }
