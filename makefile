@@ -10,8 +10,8 @@ CFLAGS = -c -Wall -std=c++11
 # $(CC) -o $(EXEC) main.o util.o heap.o
 # main.o depends on the files main.h main.cpp
 
-proj1: main.o util.o heap.o graph.o
-	$(CC) -o proj1 main.o util.o heap.o graph.o
+proj2: main.o util.o heap.o graph.o
+	$(CC) -o proj2 main.o util.o heap.o graph.o
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
 # main.o is created by the command g++ -c -Wall main.cpp

@@ -28,6 +28,22 @@ void deleteList(LIST* lpt)
 			free(lpt);
 		}
 	}
+	
+void pathRecur(ELEMENT nodeTrav, GRAPH* graph, int u, int v, int z)
+{
+	
+	if (nodeTrav.node != u && z < 100)
+	{
+		z++;
+		nodeTrav = graph->heapOfNodes[graph->nodePositions[nodeTrav.pi]];
+		pathRecur(nodeTrav, graph, u, nodeTrav.node, z);
+	}
+	/*else
+	{
+		v = nodeTrav.node;
+	}*/
+	std::cout << v << ", ";
+}
 
 int main()
 {
@@ -239,8 +255,9 @@ int main()
 						}
 						else
 						{
-							
-						std::cout << "PATH: " << v;
+						
+												
+						/*std::cout << "PATH: " << v;
 						ELEMENT nodeTrav = graph->heapOfNodes[graph->nodePositions[v - 1]];
 						int z = 0;
 						
@@ -250,8 +267,14 @@ int main()
 							
 							z++;
 						} while (nodeTrav.node != u && z < 50);
+						*/
 						// could make a recursive function which prints the path left to right
 						// as it unspirals...
+						
+						std::cout << "PATH: ";
+						ELEMENT nodeTrav = graph->heapOfNodes[graph->nodePositions[v - 1]];
+						int z = 0;
+						pathRecur(nodeTrav, graph, u, v, z);
 						
 						}
 					}
